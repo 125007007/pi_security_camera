@@ -19,4 +19,5 @@ git clone https://github.com/125007007/pi_security_camera.git
 ## Usage
 
 Simply run the ```bash 
-main.py``` file.
+main.py
+``` file.

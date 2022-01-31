@@ -1,5 +1,5 @@
 #Import necessary libraries
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, jsonify
 ''' This is the BEST Motion Detection Algoritim I've had yet. Feb 26 2021'''
 import os, datetime, shutil, cv2, time, threading, logging, sys
 import numpy as np
@@ -183,10 +183,15 @@ def gen_frames():
 
 @app.route('/')
 def index():
-    global last_motion
+    #global last_motion
 
-    data = { 'last_motion': last_motion}
-    return render_template('index.html', **data)
+    #data = { 'last_motion': last_motion}
+    return render_template('index.html')
+
+@app.route('/lastMotion',methods=['POST'])
+def lastMotion():
+    global last_motion
+    return jsonify(last_motion)
 
 @app.route('/video_feed')
 def video_feed():

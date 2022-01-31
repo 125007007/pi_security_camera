@@ -188,7 +188,7 @@ def index():
     #data = { 'last_motion': last_motion}
     return render_template('index.html')
 
-@app.route('/lastMotion',methods=['POST'])
+@app.route('/lastMotion', methods=['POST'])
 def lastMotion():
     global last_motion
     return jsonify(last_motion)

@@ -24,3 +24,5 @@
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode
 .vscode/settings.json
+info_log.log
+error_log.log

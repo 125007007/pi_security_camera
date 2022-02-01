@@ -34,24 +34,26 @@ def motion_detection():
     cap.set(3, 1280)
     cap.set(4, 720)
 
-    def print_date_time():
+    def print_date_time(frame):
         '''Updates current date and time on to video'''
         CURR_TIME = time.asctime()
-        cv2.putText(frame1,str(CURR_TIME),(290,25),font, 0.8, (0,255,0),1, cv2.LINE_AA)			#cv2.putText(frame2,"Enter to pause. Hold ESC to quit.",(10,470), font, 0.6,(255,255,255),1)
+        cv2.putText(frame,str(CURR_TIME),(290,25),font, 0.8, (0,255,0),1, cv2.LINE_AA)			#cv2.putText(frame2,"Enter to pause. Hold ESC to quit.",(10,470), font, 0.6,(255,255,255),1)
 
-    def light_measurer():
-        global image_brightness
-        light_frame = cv2.cvtColor(frame1, cv2.COLOR_BGR2HSV)
+    def light_measurer(frame):
+        #global image_brightness
+        light_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         H, S, V = cv2.split(light_frame)
         image_brightness = round(V.mean(), 1)
         #print(image_brightness)
         #cv2.putText(frame1,"Brightness: {}".format(image_brightness), (10,25),font, 0.8, (0,255,0),1, cv2.LINE_AA)
+        return image_brightness
 
 
     def dt_file_name():
-        global file_name
+        #global file_name
         # sets file name to current date and time to the nearest second
         file_name = datetime.datetime.now().time() # date and time with microseconds
+        return file_name
     
     while(True):
 
@@ -82,12 +84,11 @@ def motion_detection():
             #contours, hierarchy = cv2.findContours(fg_mask_bb,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[-2:]
             areas = [cv2.contourArea(c) for c in contours]
 
-            light_measurer()
 
-            if image_brightness > nightThres:
+            if light_measurer(frame1) > nightThres:
                 areaThres = 4000
                 cv2.putText(frame1, "Using Day Thres", (20,55),font, 0.8, (0,255,0),1, cv2.LINE_AA)
-            elif image_brightness < nightThres:
+            elif light_measurer(frame1) < nightThres:
                 areaThres = 450
                 cv2.putText(frame1, "Using Night Thres", (20,55),font, 0.8, (0,255,0),1, cv2.LINE_AA)
 
@@ -99,8 +100,8 @@ def motion_detection():
                     cv2.drawContours(frame1, c, -1, (0, 255, 0), 2)
                     (x, y, w, h) = cv2.boundingRect(c)
                     #cv2.rectangle(frame1, (x, y), (x+w, y+h), (0, 0, 255), 2)
-                    print_date_time()
-                    light_measurer()
+                    print_date_time(frame2)
+                    #light_measurer()
                     # initial time of motion Detected
                     init_time = time.time()
                     # Find the largest moving object in the image
@@ -109,20 +110,20 @@ def motion_detection():
                     # Draw the bounding box
                     cnt = contours[max_index]
                     area_real = cv2.contourArea(cnt)
-                    cv2.putText(frame1, "Area is: {}".format(area_real), (20,80),font, 0.4, (0,255,0),1, cv2.LINE_AA)
-                    cv2.putText(frame1,"Brightness: {}".format(image_brightness), (10,25),font, 0.8, (0,255,0),1, cv2.LINE_AA)
+                    cv2.putText(frame2, "Area is: {}".format(area_real), (20,80),font, 0.4, (0,255,0),1, cv2.LINE_AA)
+                    cv2.putText(frame2,"Brightness: {}".format(light_measurer(frame2)), (10,25),font, 0.8, (0,255,0),1, cv2.LINE_AA)
                     #cv2.putText(frame1,"MD", (0,20),font, 0.8, (0,255,0),2, cv2.LINE_AA)
-                    dt_file_name()
-                    img_name =("snapshot-"+str(file_name)+str(".png"))
+                    
+                    img_name =("snapshot-"+str(dt_file_name())+str(".png"))
                     #print(save_dir)
                     #cv2.imwrite(init.todays_dir_path + '/{}'.format(img_name), frame1)
                     last_motion = datetime.datetime.now()
                     infoLog.info(f"saved {img_name}")
-                    #with lock:
-                        #stream_frame = frame1.copy()
-            print_date_time()
+                    with lock:
+                        stream_frame = frame2.copy()
+            print_date_time(frame2)
             with lock:
-                stream_frame = frame1.copy()
+                stream_frame = frame2.copy()
             # Display the resulting frame
             #cv2.imshow('frame',frame1)
             #cv2.imshow('diff',diff)

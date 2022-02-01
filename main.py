@@ -1,8 +1,10 @@
 #Import necessary libraries
 from flask import Flask, render_template, Response, jsonify
 ''' This is the BEST Motion Detection Algoritim I've had yet. Feb 26 2021'''
-import os, datetime, shutil, cv2, time, threading, logging, sys
+import os, datetime, shutil, cv2, time, threading, sys
 import numpy as np
+# import custom modules
+from logger import SetupLogger
 
 
 #Initialize the Flask app
@@ -11,31 +13,11 @@ lock = threading.Lock()
 stream_frame = None
 last_motion = 'No motion has being detected yet'
 
-# ------------------ Logging Stuff ------------------
+# Info Logger
+infoLog = SetupLogger.setup_logger('infoLogger', os.path.join(os.getcwd(), 'infoLog.log'))
 
-formatter = logging.Formatter('%(asctime)s - %(threadName)s - %(levelname)s - %(message)s')
-
-def setup_logger(name, log_file, level=logging.INFO):
-    """To setup as many loggers as you want"""
-
-    handler = logging.FileHandler(log_file)
-    handler.setFormatter(formatter)
-
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
-    logger.addHandler(handler)
-
-    return logger
-
-# first file logger
-
-logger = setup_logger('info_logger', os.path.join(os.getcwd(), 'info_log.log'))
-
-# second file logger
-super_logger = setup_logger('error_logger', os.path.join(os.getcwd(), 'error_log.log'))
-#super_logger.error('This is an error message')
-
-# ------------------ End ------------------
+# Error Logger 
+errorLog = SetupLogger.setup_logger('errorLogger', os.path.join(os.getcwd(), 'errorLog.log'))
 
 
 def motion_detection():
@@ -48,7 +30,7 @@ def motion_detection():
     font = cv2.FONT_HERSHEY_SIMPLEX
     # uncomment when run on pi
     # set to True if camera is upside down
-    cam_upside_down = True
+    cam_upside_down = False
     cap.set(3, 1280)
     cap.set(4, 720)
 
@@ -113,7 +95,7 @@ def motion_detection():
                 area = cv2.contourArea(c)
 
                 if area > areaThres:
-                    logger.info(f'Motion detected - Area: {area}')
+                    infoLog.info(f'Motion detected - Area: {area}')
                     cv2.drawContours(frame1, c, -1, (0, 255, 0), 2)
                     (x, y, w, h) = cv2.boundingRect(c)
                     #cv2.rectangle(frame1, (x, y), (x+w, y+h), (0, 0, 255), 2)
@@ -135,7 +117,7 @@ def motion_detection():
                     #print(save_dir)
                     #cv2.imwrite(init.todays_dir_path + '/{}'.format(img_name), frame1)
                     last_motion = datetime.datetime.now()
-                    logger.info(f"saved {img_name}")
+                    infoLog.info(f"saved {img_name}")
                     #with lock:
                         #stream_frame = frame1.copy()
             print_date_time()
@@ -155,7 +137,7 @@ def motion_detection():
                 break
        
         except Exception as e:
-                super_logger.exception("Exception occurred")
+                errorLog.exception("Exception occurred")
                 sys.exit()
 # Close down the video stream
     cap.release()
@@ -203,8 +185,12 @@ if __name__ == "__main__":
         motion_thread = threading.Thread(target=motion_detection)
         #motion_thread.daemon = True
         motion_thread.start()
-        logger.info("Starting motion thread")
+        infoLog.info("Starting motion thread")
+        app.run(host="0.0.0.0", port='80', debug=False, threaded=True)
+        infoLog.info("Starting web server")
     except Exception as e:
-        super_logger.exception("Exception occurred")
+        errorLog.exception("Exception occurred")
         sys.exit()
-    app.run(host="0.0.0.0", port='80', debug=False, threaded=True)
+
+
+    

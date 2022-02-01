@@ -29,3 +29,5 @@ error_log.log
 password-manager.py
 errorLog.log
 infoLog.log
+__pycache__/logger.cpython-310.pyc
+test-logging.py

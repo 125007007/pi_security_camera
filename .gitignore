@@ -31,3 +31,4 @@ errorLog.log
 infoLog.log
 __pycache__/logger.cpython-310.pyc
 test-logging.py
+file_management.py

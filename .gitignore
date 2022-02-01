@@ -32,3 +32,4 @@ infoLog.log
 __pycache__/logger.cpython-310.pyc
 test-logging.py
 file_management.py
+__pycache__/motionDetection.cpython-310.pyc

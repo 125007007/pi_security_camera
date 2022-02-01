@@ -30,7 +30,7 @@ def motion_detection():
     font = cv2.FONT_HERSHEY_SIMPLEX
     # uncomment when run on pi
     # set to True if camera is upside down
-    cam_upside_down = False
+    cam_upside_down = True
     cap.set(3, 1280)
     cap.set(4, 720)
 

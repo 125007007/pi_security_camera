@@ -26,3 +26,4 @@
 .vscode/settings.json
 info_log.log
 error_log.log
+password-manager.py

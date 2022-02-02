@@ -97,7 +97,7 @@ def motion_detection():
 
                 if area > areaThres:
                     infoLog.info(f'Motion detected - Area: {area}')
-                    cv2.drawContours(frame1, c, -1, (0, 255, 0), 2)
+                    cv2.drawContours(frame2, c, -1, (0, 255, 0), 2)
                     (x, y, w, h) = cv2.boundingRect(c)
                     #cv2.rectangle(frame1, (x, y), (x+w, y+h), (0, 0, 255), 2)
                     print_date_time(frame2)
@@ -106,7 +106,6 @@ def motion_detection():
                     init_time = time.time()
                     # Find the largest moving object in the image
                     max_index = np.argmax(areas)
-
                     # Draw the bounding box
                     cnt = contours[max_index]
                     area_real = cv2.contourArea(cnt)
@@ -121,28 +120,19 @@ def motion_detection():
                     infoLog.info(f"saved {img_name}")
                     with lock:
                         stream_frame = frame2.copy()
+
             print_date_time(frame2)
             with lock:
                 stream_frame = frame2.copy()
-            # Display the resulting frame
-            #cv2.imshow('frame',frame1)
-            #cv2.imshow('diff',diff)
-            #cv2.imshow('gray',gray)
-            #cv2.imshow('blur',blur)
-            #cv2.imshow('thresh',thresh)
-            #cv2.imshow('dilated',dilated)
-
-            # If "q" is pressed on the keyboard,
-            # exit this loop
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
        
         except Exception as e:
                 errorLog.exception("Exception occurred")
-                sys.exit()
+                break
+                
 # Close down the video stream
     cap.release()
     cv2.destroyAllWindows()
+    sys.exit()
 
 def gen_frames():  
     # grab global references to the output frame and lock variables
@@ -191,7 +181,4 @@ if __name__ == "__main__":
         infoLog.info("Starting web server")
     except Exception as e:
         errorLog.exception("Exception occurred")
-        sys.exit()
-
-
-    
+        sys.exit()  

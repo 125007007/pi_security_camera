@@ -1,10 +1,10 @@
 #Import necessary libraries
 from flask import Flask, render_template, Response, jsonify
-''' This is the BEST Motion Detection Algoritim I've had yet. Feb 26 2021'''
 import os, datetime, shutil, cv2, time, threading, sys
 import numpy as np
 # import custom modules
 from logger import SetupLogger
+from fileManagement import FileManager
 
 
 #Initialize the Flask app
@@ -15,11 +15,10 @@ last_motion = 'No motion has being detected yet'
 
 # Info Logger
 infoLog = SetupLogger.setup_logger('infoLogger', os.path.join(os.getcwd(), 'infoLog.log'))
-
 # Error Logger 
 errorLog = SetupLogger.setup_logger('errorLogger', os.path.join(os.getcwd(), 'errorLog.log'))
 
-
+# Motion Detection Function
 def motion_detection():
     #try:
     nightThres = 40
@@ -28,7 +27,6 @@ def motion_detection():
     #cap = cv2.VideoCapture('rtsp://admin:"Hmit2eyrlic9+%q@192.168.20.103:554//h264Preview_01_sub')
     cap = cv2.VideoCapture(0)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    # uncomment when run on pi
     # set to True if camera is upside down
     cam_upside_down = True
     cap.set(3, 1280)
@@ -37,7 +35,7 @@ def motion_detection():
     def print_date_time(frame):
         '''Updates current date and time on to video'''
         CURR_TIME = time.asctime()
-        cv2.putText(frame,str(CURR_TIME),(290,25),font, 0.8, (0,255,0),1, cv2.LINE_AA)			#cv2.putText(frame2,"Enter to pause. Hold ESC to quit.",(10,470), font, 0.6,(255,255,255),1)
+        cv2.putText(frame,str(CURR_TIME),(290,25),font, 0.8, (0,255,0),1, cv2.LINE_AA)
 
     def light_measurer(frame):
         #global image_brightness
@@ -115,15 +113,19 @@ def motion_detection():
                     
                     img_name =("snapshot-"+str(dt_file_name())+str(".png"))
                     #print(save_dir)
-                    #cv2.imwrite(init.todays_dir_path + '/{}'.format(img_name), frame1)
+                    #cv2.imwrite(FileManager().currentDateDir + '/{}'.format(img_name), frame2)
+                    if not cv2.imwrite(os.path.join(FileManager().currentDateDir, img_name), frame2):
+                        raise Exception('Could not write image')
                     last_motion = datetime.datetime.now()
                     infoLog.info(f"saved {img_name}")
                     with lock:
                         stream_frame = frame2.copy()
+                        stream_frame = frame1.copy()
 
             print_date_time(frame2)
             with lock:
                 stream_frame = frame2.copy()
+                stream_frame = frame1.copy()
        
         except Exception as e:
                 errorLog.exception("Exception occurred")
@@ -134,6 +136,7 @@ def motion_detection():
     cv2.destroyAllWindows()
     sys.exit()
 
+# Web Server Functions
 def gen_frames():  
     # grab global references to the output frame and lock variables
 	global stream_frame, lock
@@ -152,7 +155,7 @@ def gen_frames():
 				continue
 		# yield the output frame in the byte format
 		yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + 
-			bytearray(encodedImage) + b'\r\n')
+			bytearray(encodedImage) + b'\r\n') 
 
 @app.route('/')
 def index():
@@ -170,15 +173,31 @@ def lastMotion():
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
+def files():
+    while True:
+        FileManager().createSnapshotsDir()
+        FileManager().createCurrentDateDir()
+        FileManager().removeOldDir()
+
 if __name__ == "__main__":
     try:
         # start motion detection thread
         motion_thread = threading.Thread(target=motion_detection)
-        #motion_thread.daemon = True
+        motion_thread.daemon = True
         motion_thread.start()
         infoLog.info("Starting motion thread")
         app.run(host="0.0.0.0", port='80', debug=False, threaded=True)
         infoLog.info("Starting web server")
     except Exception as e:
         errorLog.exception("Exception occurred")
-        sys.exit()  
+        sys.exit()
+
+    try:
+        # start file manager thread
+        fileThread = threading.Thread(target=files)
+        fileThread.start()
+        infoLog.info("Starting file manager thread")
+    except Exception as e:
+        errorLog.exception("Exception occurred")
+        sys.exit()

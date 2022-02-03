@@ -24,7 +24,6 @@ def motion_detection():
     nightThres = 40
     global stream_frame, lock, last_motion
     # Create a VideoCapture object
-    #cap = cv2.VideoCapture('rtsp://admin:"Hmit2eyrlic9+%q@192.168.20.103:554//h264Preview_01_sub')
     cap = cv2.VideoCapture(0)
     font = cv2.FONT_HERSHEY_SIMPLEX
     # set to True if camera is upside down

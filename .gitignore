@@ -33,3 +33,6 @@ __pycache__/logger.cpython-310.pyc
 test-logging.py
 file_management.py
 __pycache__/motionDetection.cpython-310.pyc
+file_management.py
+file-testing.py
+__pycache__/fileManagement.cpython-310.pyc

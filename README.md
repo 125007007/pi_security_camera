@@ -1,6 +1,7 @@
-# Raspberry Pi Security Camera
+# Raspberry Pi Security Camera - Dev Branch
 
 Raspberry Pi Security Camera program written in Python 3.
+All changes happen here and when proved to work are merged with the main branch.
 
 ## Installation
 

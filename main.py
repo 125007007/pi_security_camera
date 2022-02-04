@@ -182,6 +182,7 @@ def files():
         FileManager().createSnapshotsDir()
         FileManager().createCurrentDateDir()
         FileManager().removeOldDir()
+        time.sleep(0.25)
 
 if __name__ == "__main__":
     try:

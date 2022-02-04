@@ -185,6 +185,15 @@ def files():
 
 if __name__ == "__main__":
     try:
+        # start file manager thread
+        fileThread = threading.Thread(target=files)
+        fileThread.start()
+        infoLog.info("Starting file manager thread")
+    except Exception as e:
+        errorLog.exception("Exception occurred")
+        sys.exit()
+    
+    try:
         # start motion detection thread
         motion_thread = threading.Thread(target=motion_detection)
         motion_thread.daemon = True
@@ -196,11 +205,4 @@ if __name__ == "__main__":
         errorLog.exception("Exception occurred")
         sys.exit()
 
-    try:
-        # start file manager thread
-        fileThread = threading.Thread(target=files)
-        fileThread.start()
-        infoLog.info("Starting file manager thread")
-    except Exception as e:
-        errorLog.exception("Exception occurred")
-        sys.exit()
+

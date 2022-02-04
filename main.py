@@ -45,11 +45,17 @@ def motion_detection():
         #cv2.putText(frame1,"Brightness: {}".format(image_brightness), (10,25),font, 0.8, (0,255,0),1, cv2.LINE_AA)
         return image_brightness
 
-
     def dt_file_name():
         #global file_name
         # sets file name to current date and time to the nearest second
-        file_name = datetime.datetime.now().time() # date and time with microseconds
+        file_name = str(datetime.datetime.now().time()) # date and time with microseconds
+        print(file_name)
+        file_name = list(file_name)
+        file_name[2] = '_'
+        file_name[5] = '_'
+        file_name[8] = '_'
+        file_name = ''.join(file_name)
+        print(len(file_name))
         return file_name
     
     while(True):
@@ -119,12 +125,10 @@ def motion_detection():
                     infoLog.info(f"saved {img_name}")
                     with lock:
                         stream_frame = frame2.copy()
-                        stream_frame = frame1.copy()
 
             print_date_time(frame2)
             with lock:
                 stream_frame = frame2.copy()
-                stream_frame = frame1.copy()
        
         except Exception as e:
                 errorLog.exception("Exception occurred")

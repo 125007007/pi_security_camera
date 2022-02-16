@@ -1,30 +1,41 @@
 import os, shutil
 import datetime
+from logger import SetupLogger
 
-class FileManager():
+class FileManager(object):
 
-    def __init__(self):
-        self.pwd = os.getcwd()
-        self.todays_date = datetime.date.today()
-        self.new_dir_name = str(self.todays_date)
-        # sets the date four days ago
-        self.four_days_ago = self.todays_date - datetime.timedelta(days=3)
-        self.old_dir_name = str(self.four_days_ago)
-        self.fullpath = os.path.join(self.pwd, 'Snapshots')
-        # sets path to respective dirs
-        self.path_to_old_dir = os.path.join(self.fullpath, self.old_dir_name)
-        self.currentDateDir = os.path.join(self.fullpath, self.new_dir_name)
+    pwd = os.getcwd()
+    # Info Logger
+    infoLog = SetupLogger.setup_logger('infoLogger', os.path.join(os.getcwd(), 'fileManagment.log'))
+    todays_date = datetime.date.today()
+    new_dir_name = str(todays_date)
+    # sets the date four days ago
+    four_days_ago = todays_date - datetime.timedelta(days=3)
+    old_dir_name = str(four_days_ago)
+    fullpath = os.path.join(pwd, 'Snapshots')
+    # sets path to respective dirs
+    path_to_old_dir = os.path.join(fullpath, old_dir_name)
+    currentDateDir = os.path.join(fullpath, new_dir_name)
 
-    def createSnapshotsDir(self):
-        if not os.path.exists(self.fullpath):
-            os.mkdir(self.fullpath)
+    def createSnapshotsDir():
+        if not os.path.exists(FileManager.fullpath):
+            FileManager.infoLog.info("Creating Snapshots Directory")
+            os.mkdir(FileManager.fullpath)
+        elif os.path.exists(FileManager.fullpath):
+            FileManager.infoLog.info("Snapshots Directory already exists")
 
-    def createCurrentDateDir(self):
-        if not os.path.exists(self.currentDateDir):
-            os.mkdir(self.currentDateDir)
+    def createCurrentDateDir():
+        if not os.path.exists(FileManager.currentDateDir):
+            FileManager.infoLog.info(f"Creating {FileManager.new_dir_name} Directory")
+            os.mkdir(FileManager.currentDateDir)
+        elif os.path.exists(FileManager.currentDateDir):
+            FileManager.infoLog.info(f"{FileManager.new_dir_name} Directory already exists")
 
-    def removeOldDir(self):
+    def removeOldDir():
         # checks if a folder with the name of the date four days ago exists
-        if os.path.exists(self.path_to_old_dir):
+        if os.path.exists(FileManager.path_to_old_dir) is True:
+            FileManager.infoLog.info(f"Removing {FileManager.old_dir_name} Directory")
             # remove old dir
-            shutil.rmtree(self.path_to_old_dir)
+            shutil.rmtree(FileManager.path_to_old_dir)
+        elif os.path.exists(FileManager.path_to_old_dir) is False:
+            FileManager.infoLog.info(f"{FileManager.old_dir_name} does not exist")

@@ -49,13 +49,13 @@ def motion_detection():
         #global file_name
         # sets file name to current date and time to the nearest second
         file_name = str(datetime.datetime.now().time()) # date and time with microseconds
-        print(file_name)
+        #print(file_name)
         file_name = list(file_name)
         file_name[2] = '_'
         file_name[5] = '_'
         file_name[8] = '_'
         file_name = ''.join(file_name)
-        print(len(file_name))
+        #print(len(file_name))
         return file_name
     
     while(True):
@@ -86,6 +86,7 @@ def motion_detection():
             contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             #contours, hierarchy = cv2.findContours(fg_mask_bb,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)[-2:]
             areas = [cv2.contourArea(c) for c in contours]
+            #print(areas)
 
 
             if light_measurer(frame1) > nightThres:
@@ -96,35 +97,39 @@ def motion_detection():
                 cv2.putText(frame1, "Using Night Thres", (20,55),font, 0.8, (0,255,0),1, cv2.LINE_AA)
 
             for c in contours:
+                (x, y, w, h) = cv2.boundingRect(c)
                 area = cv2.contourArea(c)
+                
 
                 if area > areaThres:
-                    infoLog.info(f'Motion detected - Area: {area}')
-                    cv2.drawContours(frame2, c, -1, (0, 255, 0), 2)
-                    (x, y, w, h) = cv2.boundingRect(c)
-                    #cv2.rectangle(frame1, (x, y), (x+w, y+h), (0, 0, 255), 2)
-                    print_date_time(frame2)
-                    #light_measurer()
-                    # initial time of motion Detected
-                    init_time = time.time()
-                    # Find the largest moving object in the image
-                    max_index = np.argmax(areas)
-                    # Draw the bounding box
-                    cnt = contours[max_index]
-                    area_real = cv2.contourArea(cnt)
-                    cv2.putText(frame2, "Area is: {}".format(area_real), (20,80),font, 0.4, (0,255,0),1, cv2.LINE_AA)
-                    cv2.putText(frame2,"Brightness: {}".format(light_measurer(frame2)), (10,25),font, 0.8, (0,255,0),1, cv2.LINE_AA)
-                    #cv2.putText(frame1,"MD", (0,20),font, 0.8, (0,255,0),2, cv2.LINE_AA)
-                    
-                    img_name =("snapshot-"+str(dt_file_name())+str(".png"))
-                    #print(save_dir)
-                    #cv2.imwrite(FileManager().currentDateDir + '/{}'.format(img_name), frame2)
-                    if not cv2.imwrite(os.path.join(FileManager().currentDateDir, img_name), frame2):
-                        raise Exception('Could not write image')
-                    last_motion = datetime.datetime.now()
-                    infoLog.info(f"saved {img_name}")
-                    with lock:
-                        stream_frame = frame2.copy()
+                    continue
+
+                infoLog.info(f'Motion detected - Area: {area}')
+                cv2.drawContours(frame2, c, -1, (0, 255, 0), 2)
+                
+                #cv2.rectangle(frame1, (x, y), (x+w, y+h), (0, 0, 255), 2)
+                print_date_time(frame2)
+                #light_measurer()
+                # initial time of motion Detected
+                init_time = time.time()
+                # Find the largest moving object in the image
+                max_index = np.argmax(areas)
+                # Draw the bounding box
+                cnt = contours[max_index]
+                area_real = cv2.contourArea(cnt)
+                cv2.putText(frame2, "Area is: {}".format(area_real), (20,80),font, 0.4, (0,255,0),1, cv2.LINE_AA)
+                cv2.putText(frame2,"Brightness: {}".format(light_measurer(frame2)), (10,25),font, 0.8, (0,255,0),1, cv2.LINE_AA)
+                #cv2.putText(frame1,"MD", (0,20),font, 0.8, (0,255,0),2, cv2.LINE_AA)
+                
+                img_name =("snapshot-"+str(dt_file_name())+str(".png"))
+                #print(save_dir)
+                #cv2.imwrite(FileManager.currentDateDir + '/{}'.format(img_name), frame2)
+                if not cv2.imwrite(os.path.join(FileManager.currentDateDir, img_name), frame2):
+                    raise Exception('Could not write image')
+                last_motion = datetime.datetime.now()
+                infoLog.info(f"saved {img_name}")
+                with lock:
+                    stream_frame = frame2.copy()
 
             print_date_time(frame2)
             with lock:
@@ -134,7 +139,7 @@ def motion_detection():
                 errorLog.exception("Exception occurred")
                 break
                 
-# Close down the video stream
+# Close down the video stream 
     cap.release()
     cv2.destroyAllWindows()
     sys.exit()
@@ -179,9 +184,9 @@ def video_feed():
 
 def files():
     while True:
-        FileManager().createSnapshotsDir()
-        FileManager().createCurrentDateDir()
-        FileManager().removeOldDir()
+        FileManager.createSnapshotsDir()
+        FileManager.createCurrentDateDir()
+        FileManager.removeOldDir()
         time.sleep(0.25)
 
 if __name__ == "__main__":
@@ -189,7 +194,7 @@ if __name__ == "__main__":
         # start file manager thread
         fileThread = threading.Thread(target=files)
         fileThread.start()
-        infoLog.info("Starting file manager thread")
+        infoLog.info("Starting file manager thread")     
     except Exception as e:
         errorLog.exception("Exception occurred")
         sys.exit()

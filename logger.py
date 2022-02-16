@@ -2,7 +2,7 @@ import logging
 
 class SetupLogger():
     global formatter
-    formatter = logging.Formatter('%(asctime)s - %(threadName)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(funcName)s - %(threadName)s - %(levelname)s - %(message)s')
 
     def setup_logger(name, log_file, level=logging.INFO):
         """To setup as many loggers as you want"""

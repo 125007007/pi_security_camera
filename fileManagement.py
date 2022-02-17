@@ -6,7 +6,7 @@ class FileManager(object):
 
     pwd = os.getcwd()
     # Info Logger
-    infoLog = SetupLogger.setup_logger('infoLogger', os.path.join(os.getcwd(), 'fileManagment.log'))
+    log = SetupLogger.setup_logger('infoLogger', os.path.join(os.getcwd(), 'fileManagment.log'))
     todays_date = datetime.date.today()
     new_dir_name = str(todays_date)
     # sets the date four days ago
@@ -19,23 +19,23 @@ class FileManager(object):
 
     def createSnapshotsDir():
         if not os.path.exists(FileManager.fullpath):
-            FileManager.infoLog.info("Creating Snapshots Directory")
+            FileManager.log.info("Creating Snapshots Directory")
             os.mkdir(FileManager.fullpath)
         elif os.path.exists(FileManager.fullpath):
-            FileManager.infoLog.info("Snapshots Directory already exists")
+            FileManager.log.info("Snapshots Directory already exists")
 
     def createCurrentDateDir():
         if not os.path.exists(FileManager.currentDateDir):
-            FileManager.infoLog.info(f"Creating {FileManager.new_dir_name} Directory")
+            FileManager.log.info(f"Creating {FileManager.new_dir_name} Directory")
             os.mkdir(FileManager.currentDateDir)
         elif os.path.exists(FileManager.currentDateDir):
-            FileManager.infoLog.info(f"{FileManager.new_dir_name} Directory already exists")
+            FileManager.log.info(f"{FileManager.new_dir_name} Directory already exists")
 
     def removeOldDir():
         # checks if a folder with the name of the date four days ago exists
         if os.path.exists(FileManager.path_to_old_dir) is True:
-            FileManager.infoLog.info(f"Removing {FileManager.old_dir_name} Directory")
+            FileManager.log.info(f"Removing {FileManager.old_dir_name} Directory")
             # remove old dir
             shutil.rmtree(FileManager.path_to_old_dir)
         elif os.path.exists(FileManager.path_to_old_dir) is False:
-            FileManager.infoLog.info(f"{FileManager.old_dir_name} does not exist")
+            FileManager.log.info(f"{FileManager.old_dir_name} does not exist")

@@ -6,7 +6,7 @@ class FileManager(object):
 
     pwd = os.getcwd()
     # Info Logger
-    log = SetupLogger.setup_logger('infoLogger', os.path.join(os.getcwd(), 'fileManagment.log'))
+    log = SetupLogger.setup_logger('Logger', os.path.join(os.getcwd(), 'fileManagment.log'))
     todays_date = datetime.date.today()
     new_dir_name = str(todays_date)
     # sets the date four days ago
@@ -21,15 +21,11 @@ class FileManager(object):
         if not os.path.exists(FileManager.fullpath):
             FileManager.log.info("Creating Snapshots Directory")
             os.mkdir(FileManager.fullpath)
-        elif os.path.exists(FileManager.fullpath):
-            FileManager.log.info("Snapshots Directory already exists")
 
     def createCurrentDateDir():
         if not os.path.exists(FileManager.currentDateDir):
             FileManager.log.info(f"Creating {FileManager.new_dir_name} Directory")
             os.mkdir(FileManager.currentDateDir)
-        elif os.path.exists(FileManager.currentDateDir):
-            FileManager.log.info(f"{FileManager.new_dir_name} Directory already exists")
 
     def removeOldDir():
         # checks if a folder with the name of the date four days ago exists
@@ -37,5 +33,3 @@ class FileManager(object):
             FileManager.log.info(f"Removing {FileManager.old_dir_name} Directory")
             # remove old dir
             shutil.rmtree(FileManager.path_to_old_dir)
-        elif os.path.exists(FileManager.path_to_old_dir) is False:
-            FileManager.log.info(f"{FileManager.old_dir_name} does not exist")

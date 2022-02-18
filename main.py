@@ -1,6 +1,6 @@
 #Import necessary libraries
 from flask import Flask, render_template, Response, jsonify
-import os, datetime, shutil, cv2, time, threading, sys
+import os, datetime, shutil, cv2, time, threading, sys, json
 import numpy as np
 # import custom modules
 from logger import SetupLogger
@@ -26,10 +26,14 @@ def motion_detection():
     # Create a VideoCapture object
     cap = cv2.VideoCapture(0)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    # set to True if camera is upside down
-    cam_upside_down = True
-    cap.set(3, 1280)
-    cap.set(4, 720)
+    # open json config file and set vars to what is in json file
+    f = open("config.json")
+    data = json.load(f)
+    width = data["resolution"]["width"]
+    height = data["resolution"]["height"]   
+    cam_upside_down = data["cam_upside_down"]
+    cap.set(3, width)
+    cap.set(4, height)
 
     def print_date_time(frame):
         '''Updates current date and time on to video'''

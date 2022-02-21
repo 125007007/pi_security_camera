@@ -3,6 +3,12 @@
         "width": 1280, "height": 720
     },
 
-    "cam_upside_down": true
+    "cam_upside_down": true,
+
+    "use_usb_drive": false,
+
+    "usb_drive_location": "/media/pidrive/"
+
+    
 
 }

@@ -1,10 +1,15 @@
-import os, shutil
-import datetime
+import os, shutil, json, datetime
 from logger import SetupLogger
+
 
 class FileManager(object):
 
-    pwd = os.getcwd()
+    f = open("config.json")
+    data = json.load(f)
+    if data["use_usb_drive"] is True:
+        pwd = data["usb_drive_location"]
+    elif data["use_usb_drive"] is False:
+        pwd = os.getcwd()
     # Info Logger
     log = SetupLogger.setup_logger('Logger', os.path.join(os.getcwd(), 'fileManagment.log'))
     todays_date = datetime.date.today()

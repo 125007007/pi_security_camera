@@ -80,7 +80,6 @@ def motion_detection():
                 frame1 = frame1_upside_down
                 frame2 = frame2_upside_down
 
-            
             diff = cv2.absdiff(frame1, frame2)
             gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
             blur = cv2.GaussianBlur(gray, (5,5), 0)
@@ -92,20 +91,19 @@ def motion_detection():
             areas = [cv2.contourArea(c) for c in contours]
             #print(areas)
 
-
             if light_measurer(frame1) > nightThres:
                 areaThres = 4000
-                cv2.putText(frame1, "Using Day Thres", (20,55),font, 0.8, (0,255,0),1, cv2.LINE_AA)
+                cv2.putText(frame2, "Using Day Thres", (20,55),font, 0.8, (0,255,0),1, cv2.LINE_AA)
             elif light_measurer(frame1) < nightThres:
                 areaThres = 450
-                cv2.putText(frame1, "Using Night Thres", (20,55),font, 0.8, (0,255,0),1, cv2.LINE_AA)
+                cv2.putText(frame2, "Using Night Thres", (20,55),font, 0.8, (0,255,0),1, cv2.LINE_AA)
 
             for c in contours:
                 (x, y, w, h) = cv2.boundingRect(c)
                 area = cv2.contourArea(c)
                 
 
-                if area > areaThres:
+                if area < areaThres:
                     continue
 
                 infoLog.info(f'Motion detected - Area: {area}')
@@ -115,13 +113,13 @@ def motion_detection():
                 print_date_time(frame2)
                 #light_measurer()
                 # initial time of motion Detected
-                init_time = time.time()
+                #init_time = time.time()
                 # Find the largest moving object in the image
-                max_index = np.argmax(areas)
+                #max_index = np.argmax(areas)
                 # Draw the bounding box
-                cnt = contours[max_index]
-                area_real = cv2.contourArea(cnt)
-                cv2.putText(frame2, "Area is: {}".format(area_real), (20,80),font, 0.4, (0,255,0),1, cv2.LINE_AA)
+                #cnt = contours[max_index]
+                #area_real = cv2.contourArea(cnt)
+                #cv2.putText(frame2, "Area is: {}".format(area_real), (20,80),font, 0.4, (0,255,0),1, cv2.LINE_AA)
                 cv2.putText(frame2,"Brightness: {}".format(light_measurer(frame2)), (10,25),font, 0.8, (0,255,0),1, cv2.LINE_AA)
                 #cv2.putText(frame1,"MD", (0,20),font, 0.8, (0,255,0),2, cv2.LINE_AA)
                 

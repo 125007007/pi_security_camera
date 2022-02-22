@@ -30,7 +30,9 @@ def motion_detection():
     f = open("config.json")
     data = json.load(f)
     width = data["resolution"]["width"]
-    height = data["resolution"]["height"]   
+    height = data["resolution"]["height"]
+    day_areaThres = data["day_areaThres"]
+    night_areaThres = data["night_areaThres"]
     cam_upside_down = data["cam_upside_down"]
     cap.set(3, width)
     cap.set(4, height)
@@ -92,20 +94,19 @@ def motion_detection():
             #print(areas)
 
             if light_measurer(frame1) > nightThres:
-                areaThres = 4000
+                areaThres = day_areaThres
                 cv2.putText(frame2, "Using Day Thres", (20,55),font, 0.8, (0,255,0),1, cv2.LINE_AA)
             elif light_measurer(frame1) < nightThres:
-                areaThres = 450
+                areaThres = night_areaThres
                 cv2.putText(frame2, "Using Night Thres", (20,55),font, 0.8, (0,255,0),1, cv2.LINE_AA)
 
             for c in contours:
                 (x, y, w, h) = cv2.boundingRect(c)
                 area = cv2.contourArea(c)
-                
 
                 if area < areaThres:
                     continue
-
+                infoLog.info(f'Using - {areaThres}')
                 infoLog.info(f'Motion detected - Area: {area}')
                 cv2.drawContours(frame2, c, -1, (0, 255, 0), 2)
                 

@@ -3,12 +3,14 @@
         "width": 1280, "height": 720
     },
 
+    "day_areaThres": 5000,
+
+    "night_areaThres": 450,
+
     "cam_upside_down": true,
 
     "use_usb_drive": false,
 
-    "usb_drive_location": "/media/pidrive/"
-
-    
+    "usb_drive_location": "/media/pidrive/"    
 
 }

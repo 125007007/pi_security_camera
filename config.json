@@ -1,13 +1,13 @@
 {
     "resolution": {
-        "width": 1280, "height": 720
+        "width": 640, "height": 480
     },
 
     "day_areaThres": 5000,
 
     "night_areaThres": 450,
 
-    "cam_upside_down": true,
+    "cam_upside_down": false,
 
     "use_usb_drive": false,
 

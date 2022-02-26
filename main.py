@@ -122,8 +122,8 @@ def motion_detection():
                 #cv2.putText(frame2,"Brightness: {}".format(light_measurer(frame2)), (10,25),font, 0.8, (0,255,0),1, cv2.LINE_AA)
                 #cv2.putText(frame1,"MD", (0,20),font, 0.8, (0,255,0),2, cv2.LINE_AA)
                 img_name =("snapshot-"+str(dt_file_name())+str(".png"))
-                #cv2.imwrite(FileManager.currentDateDir + '/{}'.format(img_name), frame2)
-                if not cv2.imwrite(os.path.join(FileManager.currentDateDir, img_name), frame2):
+                #cv2.imwrite(FileManager().currentDateDir + '/{}'.format(img_name), frame2)
+                if not cv2.imwrite(os.path.join(FileManager().currentDateDir, img_name), frame2):
                     raise Exception('Could not write image')
                 last_motion = datetime.datetime.now()
                 infoLog.info(f"saved {img_name}")
@@ -182,9 +182,9 @@ def video_feed():
 
 def files():
     while True:
-        FileManager.createSnapshotsDir()
-        FileManager.createCurrentDateDir()
-        FileManager.removeOldDir()
+        FileManager().createSnapshotsDir()
+        FileManager().createCurrentDateDir()
+        FileManager().removeOldDir()
         time.sleep(0.25)
 
 if __name__ == "__main__":

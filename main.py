@@ -127,10 +127,11 @@ def motion_detection():
                     raise Exception('Could not write image')
                 last_motion = datetime.datetime.now()
                 infoLog.info(f"saved {img_name}")
-            else:
-                print_date_time(frame2)
-                with lock:
-                    stream_frame = frame2
+            
+
+            print_date_time(frame2)
+            with lock:
+                stream_frame = frame2
        
         except Exception as e:
                 errorLog.exception("Exception occurred")

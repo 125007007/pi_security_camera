@@ -4,37 +4,38 @@ from logger import SetupLogger
 
 class FileManager(object):
 
-    f = open("config.json")
-    data = json.load(f)
-    if data["use_usb_drive"] is True:
-        pwd = data["usb_drive_location"]
-    elif data["use_usb_drive"] is False:
-        pwd = os.getcwd()
-    # Info Logger
-    log = SetupLogger.setup_logger('Logger', os.path.join(os.getcwd(), 'fileManagment.log'))
-    todays_date = datetime.date.today()
-    new_dir_name = str(todays_date)
-    # sets the date four days ago
-    four_days_ago = todays_date - datetime.timedelta(days=3)
-    old_dir_name = str(four_days_ago)
-    fullpath = os.path.join(pwd, 'Snapshots')
-    # sets path to respective dirs
-    path_to_old_dir = os.path.join(fullpath, old_dir_name)
-    currentDateDir = os.path.join(fullpath, new_dir_name)
+    def __init__(self):
+        self.todays_date = datetime.date.today()
+        self.f = open("config.json")
+        self.data = json.load(self.f)
+        if self.data["use_usb_drive"] is True:
+            self.pwd = self.data["usb_drive_location"]
+        elif self.data["use_usb_drive"] is False:
+            self.pwd = os.getcwd()
+        # Info Logger
+        self.log = SetupLogger.setup_logger('Logger', os.path.join(os.getcwd(), 'fileManagment.log'))
+        self.new_dir_name = str(self.todays_date)
+        # sets the date four days ago
+        self.four_days_ago = self.todays_date - datetime.timedelta(days=3)
+        self.old_dir_name = str(self.four_days_ago)
+        self.fullpath = os.path.join(self.pwd, 'Snapshots')
+        # sets path to respective dirs
+        self.path_to_old_dir = os.path.join(self.fullpath, self.old_dir_name)
+        self.currentDateDir = os.path.join(self.fullpath, self.new_dir_name)
 
-    def createSnapshotsDir():
-        if not os.path.exists(FileManager.fullpath):
-            FileManager.log.info("Creating Snapshots Directory")
-            os.mkdir(FileManager.fullpath)
+    def createSnapshotsDir(self):
+        if not os.path.exists(self.fullpath):
+            self.log.info("Creating Snapshots Directory")
+            os.mkdir(self.fullpath)
 
-    def createCurrentDateDir():
-        if not os.path.exists(FileManager.currentDateDir):
-            FileManager.log.info(f"Creating {FileManager.new_dir_name} Directory")
-            os.mkdir(FileManager.currentDateDir)
+    def createCurrentDateDir(self):
+        if not os.path.exists(self.currentDateDir):
+            self.log.info(f"Creating {self.new_dir_name} Directory")
+            os.mkdir(self.currentDateDir)
 
-    def removeOldDir():
+    def removeOldDir(self):
         # checks if a folder with the name of the date four days ago exists
-        if os.path.exists(FileManager.path_to_old_dir) is True:
-            FileManager.log.info(f"Removing {FileManager.old_dir_name} Directory")
+        if os.path.exists(self.path_to_old_dir) is True:
+            self.log.info(f"Removing {self.old_dir_name} Directory")
             # remove old dir
-            shutil.rmtree(FileManager.path_to_old_dir)
+            shutil.rmtree(self.path_to_old_dir)

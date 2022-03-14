@@ -16,16 +16,17 @@ sudo apt-get install libavcodec-dev -y
 sudo apt-get install libavformat-dev -y
 sudo apt-get install libwebp-dev -y
 
-sudo pip3 install flask -y
-sudo pip3 install numpy -y
-sudo pip3 install opencv-python -y
+sudo pip3 install flask
+sudo pip3 install numpy
+sudo pip3 install opencv-python
 
 pip3 install flask
 pip3 install numpy
 pip3 install opencv-python
 
 git clone https://github.com/125007007/pi_security_camera.git
+git clone -b Dev https://github.com/125007007/pi_security_camera.git pi_security_camera_dev
 
-cd pi_security_camera
+#cd pi_security_camera
 
 ls

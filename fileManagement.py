@@ -11,6 +11,7 @@ class FileManager(object):
         self.todays_date = datetime.date.today()
         self.f = open("config.json")
         self.data = json.load(self.f)
+        self.f.close()
         if self.data["use_usb_drive"] is True:
             self.pwd = self.data["usb_drive_location"]
         elif self.data["use_usb_drive"] is False:

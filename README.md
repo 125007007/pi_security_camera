@@ -5,7 +5,11 @@ All changes happen here and when proved to work are merged with the main branch.
 
 ## Installation
 
-Install the required pakages below.
+```bash
+wget 
+```
+
+Install the required packages below.
 ```bash
 pip3 install flask
 pip3 install numpy

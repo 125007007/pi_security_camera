@@ -6,7 +6,7 @@ All changes happen here and when proved to work are merged with the main branch.
 ## Installation
 
 ```bash
-wget 
+wget -O - https://github.com/125007007/pi_security_camera/blob/Dev/install.sh | bash
 ```
 
 Install the required packages below.

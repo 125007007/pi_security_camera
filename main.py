@@ -29,6 +29,7 @@ def motion_detection():
     # open json config file and set vars to what is in json file
     f = open("config.json")
     data = json.load(f)
+    f.close()
     width = data["resolution"]["width"]
     height = data["resolution"]["height"]
     day_areaThres = data["day_areaThres"]

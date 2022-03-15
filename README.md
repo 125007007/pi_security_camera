@@ -15,6 +15,12 @@ Install Pivariety Camera Driver
 wget -O - https://raw.githubusercontent.com/125007007/pi_security_camera/Dev/pivariety_driver_install.sh | bash
 ```
 
+Then install libcamera & libcameradev
+```bash
+./install_pivariety_pkgs.sh -p libcamera_dev
+./install_pivariety_pkgs.sh -p libcamera_apps
+```
+
 ## Usage
 
 Simply run the main.py file using:

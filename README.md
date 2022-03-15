@@ -12,7 +12,7 @@ wget -O - https://raw.githubusercontent.com/125007007/pi_security_camera/Dev/ins
 
 Install Pivariety Camera Driver
 ```bash
-
+wget -O - https://raw.githubusercontent.com/125007007/pi_security_camera/Dev/pivariety_driver_install.sh | bash
 ```
 
 ## Usage

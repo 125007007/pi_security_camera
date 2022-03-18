@@ -24,9 +24,9 @@ pip3 install flask
 pip3 install numpy
 pip3 install opencv-python
 
-git clone https://github.com/125007007/pi_security_camera.git
-git clone -b Dev https://github.com/125007007/pi_security_camera.git pi_security_camera_dev
+#git clone https://github.com/125007007/pi_security_camera.git
+#git clone -b Dev https://github.com/125007007/pi_security_camera.git pi_security_camera_dev
 
 #cd pi_security_camera
 
-ls
+#ls

@@ -1,11 +1,9 @@
 #Import necessary libraries
 from flask import Flask, render_template, Response, jsonify
-import os, datetime, shutil, cv2, time, threading, sys, json
+import os, cv2, time, threading, sys
 import numpy as np
 # import custom modules
 from logger import SetupLogger
-from fileManagement import FileManager
-
 
 #Initialize the Flask app
 app = Flask(__name__)

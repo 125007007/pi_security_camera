@@ -1,6 +1,7 @@
 #Import necessary libraries
 from flask import Flask, render_template, Response, jsonify
-import os, cv2, time, threading, sys
+from PIL import Image, ImageEnhance
+import os, cv2, threading, sys
 import numpy as np
 # import custom modules
 from logger import SetupLogger
@@ -21,12 +22,23 @@ def get_frames():
     global stream_frame, lock, last_motion
     # Create a VideoCapture object
     cap = cv2.VideoCapture(3)
+    factor = 0.5 #decrease constrast
+
 
     while True:
         ret, frame = cap.read()
+        color_coverted = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        pil_image = Image.fromarray(color_coverted)
+        enhancer = ImageEnhance.Contrast(pil_image)
+        im_output = enhancer.enhance(factor)
+        # use numpy to convert the pil_image into a numpy array
+        numpy_image = np.array(im_output)
+        # convert to a openCV2 image, notice the COLOR_RGB2BGR which means that 
+        # the color is converted from RGB to BGR format
+        opencv_image = cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR) 
 
         with lock:
-            stream_frame = frame
+            stream_frame = opencv_image
         
             key = cv2.waitKey(1)
             if key == ord('q'):

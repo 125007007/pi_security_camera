@@ -31,6 +31,9 @@ def get_frames():
         pil_image = Image.fromarray(color_coverted)
         enhancer = ImageEnhance.Contrast(pil_image)
         im_output = enhancer.enhance(factor)
+        enhancer = ImageEnhance.Brightness(im_output)
+        im_output = enhancer.enhance(factor)
+
         # use numpy to convert the pil_image into a numpy array
         numpy_image = np.array(im_output)
         # convert to a openCV2 image, notice the COLOR_RGB2BGR which means that 

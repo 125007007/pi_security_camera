@@ -1,0 +1,16 @@
+{
+    "resolution": {
+        "width": 640, "height": 480
+    },
+
+    "day_areaThres": 6000,
+
+    "night_areaThres": 450,
+
+    "cam_upside_down": false,
+
+    "use_usb_drive": true,
+
+    "usb_drive_location": "/media/bill/T7"    
+
+}

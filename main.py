@@ -24,7 +24,7 @@ def motion_detection():
     nightThres = 40
     global stream_frame, lock, last_motion
     # Create a VideoCapture object
-    cap = cv2.VideoCapture('rtsp://admin:"Hmit2eyrlic9+%q@192.168.1.32:554/h264Preview_01_main')
+    cap = cv2.VideoCapture('rtsp://admin:"Hmit2eyrlic9+%q@192.168.1.20:554/h264Preview_01_main')
     font = cv2.FONT_HERSHEY_SIMPLEX
     # open json config file and set vars to what is in json file
     f = open("config.json")
